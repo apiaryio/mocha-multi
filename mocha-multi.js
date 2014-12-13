@@ -29,10 +29,13 @@ try {
 } catch (ex) {}
 
 // Capture the exit code and preserve it
-var exit = process.exit;
-process.exit = function(code) {
-  var quit = exit.bind(process, code);
-  process.on('exit', quit);
+if (shouldExit) {
+  debug('hijacking exit')
+  var exit = process.exit;
+  process.exit = function(code) {
+    var quit = exit.bind(process, code);
+    process.on('exit', quit);
+  }
 }
 
 function MochaMulti(runner) {
